@@ -257,6 +257,8 @@ class ReconNetWrapper(nn.Module):
                 nn.init.constant_(m.bias, 0.)
 
     def forward(self, x):
+        if x.shape[2] != 224:
+            x = nn.functional.interpolate(x, (224, 224), mode='bilinear', align_corners=False, antialias=True)
         x = self.backbone(x)
         if not self.use_last_fc:
             output = []
